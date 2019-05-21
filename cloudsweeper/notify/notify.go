@@ -133,8 +133,20 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 	managerToMailDataMapping := initManagerToMailDataMapping(org.Managers)
 
 	// Create filters
-	generalFilter := filter.New()
-	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["GeneralOlderThanDays"]))
+	instanceFilter := filter.New()
+	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["InstancesOlderThanDays"]))
+
+	imageFilter := filter.New()
+	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["ImagesOlderThanDays"]))
+
+	volumeFilter := filter.New()
+	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["VolumesOlderThanDays"]))
+
+	snapshotFilter := filter.New()
+	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["SnapshotsOlderThanDays"]))
+
+	bucketFilter := filter.New()
+	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["BucketsOlderThanDays"]))
 
 	whitelistFilter := filter.New()
 	whitelistFilter.OverrideWhitelist = true
@@ -157,14 +169,14 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 		// Apply filters
 		userMailData := resourceMailData{
 			Owner:     username,
-			Instances: filter.Instances(resources.Instances, generalFilter, whitelistFilter, dndFilter, dndFilter2),
-			Images:    filter.Images(resources.Images, generalFilter, whitelistFilter),
-			Volumes:   filter.Volumes(resources.Volumes, generalFilter, whitelistFilter),
-			Snapshots: filter.Snapshots(resources.Snapshots, generalFilter, whitelistFilter),
+			Instances: filter.Instances(resources.Instances, instanceFilter, whitelistFilter, dndFilter, dndFilter2),
+			Images:    filter.Images(resources.Images, imageFilter, whitelistFilter),
+			Volumes:   filter.Volumes(resources.Volumes, volumeFilter, whitelistFilter),
+			Snapshots: filter.Snapshots(resources.Snapshots, snapshotFilter, whitelistFilter),
 			Buckets:   []cloud.Bucket{},
 		}
 		if buckets, ok := allBuckets[account]; ok {
-			userMailData.Buckets = filter.Buckets(buckets, generalFilter, whitelistFilter)
+			userMailData.Buckets = filter.Buckets(buckets, bucketFilter, whitelistFilter)
 		}
 
 		// Add to the manager summary
