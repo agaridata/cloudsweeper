@@ -140,7 +140,8 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 	imageFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-images-older-than-days"]))
 
 	volumeFilter := filter.New()
-	volumeFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-volumes-older-than-days"]))
+	volumeFilter.AddVolumeRule(filter.IsUnattached())
+	volumeFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-unattached-older-than-days"]))
 
 	snapshotFilter := filter.New()
 	snapshotFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-snapshots-older-than-days"]))

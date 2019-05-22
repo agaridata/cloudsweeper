@@ -57,13 +57,13 @@ var configMapping = map[string]lookup{
 	"clean-bucket-older-than-days":      lookup{"CLEAN_BUCKET_OLDER_THAN_DAYS", "7"},
 
 	//  Notify thresholds
-	"notify-instances-older-than-days": lookup{"NOTIFY_INSTANCES_OLDER_THAN_DAYS", "30"},
-	"notify-images-older-than-days":    lookup{"NOTIFY_IMAGES_OLDER_THAN_DAYS", "30"},
-	"notify-volumes-older-than-days":   lookup{"NOTIFY_VOLUMES_OLDER_THAN_DAYS", "30"},
-	"notify-snapshots-older-than-days": lookup{"NOTIFY_SNAPSHOTS_OLDER_THAN_DAYS", "30"},
-	"notify-buckets-older-than-days":   lookup{"NOTIFY_BUCKETS_OLDER_THAN_DAYS", "30"},
-	"notify-whitelist-older-than-days": lookup{"NOTIFY_WHITELIST_OLDER_THAN_DAYS", "182"},
-	"notify-dnd-older-than-days":       lookup{"NOTIFY_DND_OLDER_THAN_DAYS", "7"},
+	"notify-instances-older-than-days":  lookup{"NOTIFY_INSTANCES_OLDER_THAN_DAYS", "30"},
+	"notify-images-older-than-days":     lookup{"NOTIFY_IMAGES_OLDER_THAN_DAYS", "30"},
+	"notify-unattached-older-than-days": lookup{"NOTIFY_UNATTATCHED_OLDER_THAN_DAYS", "30"},
+	"notify-snapshots-older-than-days":  lookup{"NOTIFY_SNAPSHOTS_OLDER_THAN_DAYS", "30"},
+	"notify-buckets-older-than-days":    lookup{"NOTIFY_BUCKETS_OLDER_THAN_DAYS", "30"},
+	"notify-whitelist-older-than-days":  lookup{"NOTIFY_WHITELIST_OLDER_THAN_DAYS", "182"},
+	"notify-dnd-older-than-days":        lookup{"NOTIFY_DND_OLDER_THAN_DAYS", "7"},
 }
 
 func loadConfig() {

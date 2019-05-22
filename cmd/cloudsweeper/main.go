@@ -66,7 +66,7 @@ var (
 		"clean-bucket-older-than-days",
 		"notify-instances-older-than-days",
 		"notify-images-older-than-days",
-		"notify-volumes-older-than-days",
+		"notify-unattached-older-than-days",
 		"notify-snapshots-older-than-days",
 		"notify-buckets-older-than-days",
 		"notify-whitelist-older-than-days",
@@ -85,7 +85,7 @@ var (
 	//  Notify thresholds
 	notifyInstancesOlderThanDays = flag.String("notify-instances-older-than-days", "", "Notify if instances is older than X days (default: 30)")
 	notifyImagesOlderThanDays    = flag.String("notify-images-older-than-days", "", "Notify if image is older than X days (default: 30)")
-	notifyVolumesOlderThanDays   = flag.String("notify-volumes-older-than-days", "", "Notify if volume is older than X days (default: 30)")
+	notifyVolumesOlderThanDays   = flag.String("notify-unattached-older-than-days", "", "Notify if volume is older than X days (default: 30)")
 	notifySnapshotsOlderThanDays = flag.String("notify-snapshots-older-than-days", "", "Notify if snapshot is older than X days (default: 30)")
 	notifyBucketsOlderThanDays   = flag.String("notify-buckets-older-than-days", "", "Notify if bucket is older than X days (default: 30)")
 	notifyWhitelistOlderThanDays = flag.String("notify-whitelist-older-than-days", "", "Notify if whitelisted is older than X days (default: 182)")
