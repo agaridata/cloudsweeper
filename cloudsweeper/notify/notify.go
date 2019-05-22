@@ -132,8 +132,6 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 	totalSummaryMailData := initTotalSummaryMailData(c.config.TotalSumAddresse)
 	managerToMailDataMapping := initManagerToMailDataMapping(org.Managers)
 
-	log.Println(thresholds)
-
 	// Create filters
 	instanceFilter := filter.New()
 	instanceFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-instances-older-than-days"]))
