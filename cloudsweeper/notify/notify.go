@@ -132,34 +132,36 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 	totalSummaryMailData := initTotalSummaryMailData(c.config.TotalSumAddresse)
 	managerToMailDataMapping := initManagerToMailDataMapping(org.Managers)
 
+	log.Println(thresholds)
+
 	// Create filters
 	instanceFilter := filter.New()
-	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["InstancesOlderThanDays"]))
+	instanceFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-instances-older-than-days"]))
 
 	imageFilter := filter.New()
-	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["ImagesOlderThanDays"]))
+	imageFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-images-older-than-days"]))
 
 	volumeFilter := filter.New()
-	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["VolumesOlderThanDays"]))
+	volumeFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-volumes-older-than-days"]))
 
 	snapshotFilter := filter.New()
-	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["SnapshotsOlderThanDays"]))
+	snapshotFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-snapshots-older-than-days"]))
 
 	bucketFilter := filter.New()
-	generalFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["BucketsOlderThanDays"]))
+	bucketFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-buckets-older-than-days"]))
 
 	whitelistFilter := filter.New()
 	whitelistFilter.OverrideWhitelist = true
-	whitelistFilter.AddGeneralRule(filter.OlderThanXMonths(thresholds["WhitelistOlderThanMonths"]))
+	whitelistFilter.AddGeneralRule(filter.OlderThanXMonths(thresholds["notify-whitelist-older-than-months"]))
 
 	// These only apply to instances
 	dndFilter := filter.New()
 	dndFilter.AddGeneralRule(filter.HasTag("no-not-delete"))
-	dndFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["DndOlderThanDays"]))
+	dndFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-dnd-older-than-days"]))
 
 	dndFilter2 := filter.New()
 	dndFilter2.AddGeneralRule(filter.NameContains("do-not-delete"))
-	dndFilter2.AddGeneralRule(filter.OlderThanXDays(thresholds["DndOlderThanDays"]))
+	dndFilter2.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-dnd-older-than-days"]))
 
 	for account, resources := range allCompute {
 		log.Println("Performing old resource review in", account)

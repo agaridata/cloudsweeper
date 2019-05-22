@@ -53,7 +53,7 @@ func MarkForCleanup(mngr cloud.ResourceManager, thresholds map[string]int) {
 		snapshotFilter.AddGeneralRule(filter.Negate(filter.TaggedForCleanup()))
 
 		imageFilter := filter.New()
-		imageFilter.AddGeneralRule(filter.OlderThanXDays(threholds["clean-images-older-than-days"]))
+		imageFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["clean-images-older-than-days"]))
 		imageFilter.AddGeneralRule(filter.Negate(filter.HasTag(releaseTag)))
 		imageFilter.AddGeneralRule(filter.Negate(filter.TaggedForCleanup()))
 
