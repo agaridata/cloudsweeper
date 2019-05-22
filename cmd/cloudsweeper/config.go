@@ -49,9 +49,9 @@ var configMapping = map[string]lookup{
 
 	// Clean thresholds
 	"clean-untagged-older-than-days":    lookup{"CLEAN_UNTAGGED_OLDER_THAN_DAYS", "30"},
-	"clean-instances-older-than-days":   lookup{"CLEAN_INSTANCES_OLDER_THAN_DAYS", "180"},
-	"clean-images-older-than-days":      lookup{"CLEAN_IMAGES_OLDER_THAN_DAYS", "180"},
-	"clean-snapshots-older-than-days":   lookup{"CLEAN_SNAPSHOTS_OLDER_THAN_DAYS", "180"},
+	"clean-instances-older-than-days":   lookup{"CLEAN_INSTANCES_OLDER_THAN_DAYS", "182"},
+	"clean-images-older-than-days":      lookup{"CLEAN_IMAGES_OLDER_THAN_DAYS", "182"},
+	"clean-snapshots-older-than-days":   lookup{"CLEAN_SNAPSHOTS_OLDER_THAN_DAYS", "182"},
 	"clean-unattatched-older-than-days": lookup{"CLEAN_UNATTATCHED_OLDER_THAN_DAYS", "30"},
 	"clean-bucket-not-modified-days":    lookup{"CLEAN_BUCKET_NOT_MODIFIED_DAYS", "182"},
 	"clean-bucket-older-than-days":      lookup{"CLEAN_BUCKET_OLDER_THAN_DAYS", "7"},
@@ -62,7 +62,7 @@ var configMapping = map[string]lookup{
 	"notify-volumes-older-than-days":   lookup{"NOTIFY_VOLUMES_OLDER_THAN_DAYS", "30"},
 	"notify-snapshots-older-than-days": lookup{"NOTIFY_SNAPSHOTS_OLDER_THAN_DAYS", "30"},
 	"notify-buckets-older-than-days":   lookup{"NOTIFY_BUCKETS_OLDER_THAN_DAYS", "30"},
-	"notify-whitelist-older-than-days": lookup{"NOTIFY_WHITELIST_OLDER_THAN_DAYS", "180"},
+	"notify-whitelist-older-than-days": lookup{"NOTIFY_WHITELIST_OLDER_THAN_DAYS", "182"},
 	"notify-dnd-older-than-days":       lookup{"NOTIFY_DND_OLDER_THAN_DAYS", "7"},
 }
 

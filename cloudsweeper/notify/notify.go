@@ -152,7 +152,7 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 
 	whitelistFilter := filter.New()
 	whitelistFilter.OverrideWhitelist = true
-	whitelistFilter.AddGeneralRule(filter.OlderThanXMonths(thresholds["notify-whitelist-older-than-months"]))
+	whitelistFilter.AddGeneralRule(filter.OlderThanXDays(thresholds["notify-whitelist-older-than-days"]))
 
 	// These only apply to instances
 	dndFilter := filter.New()
