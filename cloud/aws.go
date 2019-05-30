@@ -63,6 +63,16 @@ var (
 	errAWSRequestLimit = errors.New("aws request limit hit")
 )
 
+var awsS3StorageTypes = []string{
+	"StandardStorage",
+	"IntelligentTieringFAStorage",
+	"IntelligentTieringIAStorage",
+	"StandardIAStorage",
+	"OneZoneIAStorage",
+	"ReducedRedundancyStorage",
+	"GlacierStorage",
+}
+
 func (m *awsResourceManager) InstancesPerAccount() map[string][]Instance {
 	log.Println("Getting instances in all accounts")
 	resultMap := make(map[string][]Instance)
@@ -231,7 +241,7 @@ func (m *awsResourceManager) BucketsPerAccount() map[string][]Bucket {
 					cw := cloudwatch.New(sess, &aws.Config{
 						Credentials: cred,
 						Region:      aws.String(region)})
-					size := 0
+					storageTypeSizesGB := make(map[string]float64)
 					numberOfObjects := int64(0)
 
 					var input cloudwatch.GetMetricStatisticsInput
@@ -246,34 +256,40 @@ func (m *awsResourceManager) BucketsPerAccount() map[string][]Bucket {
 						Name:  aws.String("BucketName"),
 						Value: bu.Name,
 					}
-					dimensionBucketSizeFilter := cloudwatch.Dimension{
-						Name:  aws.String("StorageType"),
-						Value: aws.String("StandardStorage"),
-					}
-					input.Dimensions = []*cloudwatch.Dimension{
-						&dimensionNameFilter, &dimensionBucketSizeFilter,
-					}
-					bucketSizeMetrics, err := cw.GetMetricStatistics(&input)
-					if err != nil {
-						fmt.Println("Error", err)
-					}
-					if bucketSizeMetrics != nil {
-						var minimumTimeDifference float64
-						var timeDifference float64
-						var averageValue *float64
-						minimumTimeDifference = -1
-						for _, datapoint := range bucketSizeMetrics.Datapoints {
-							timeDifference = time.Since(*datapoint.Timestamp).Seconds()
-							if minimumTimeDifference == -1 {
-								minimumTimeDifference = timeDifference
-								averageValue = datapoint.Average
-							} else if timeDifference < minimumTimeDifference {
-								minimumTimeDifference = timeDifference
-								averageValue = datapoint.Average
-							}
+
+					// Get sizes for all storage types
+					numBucketSizeDatapoints := 0
+					for _, storageType := range awsS3StorageTypes {
+						dimensionBucketSizeFilter := cloudwatch.Dimension{
+							Name:  aws.String("StorageType"),
+							Value: aws.String(storageType),
 						}
-						if averageValue != nil {
-							size = int(*averageValue)
+						input.Dimensions = []*cloudwatch.Dimension{
+							&dimensionNameFilter, &dimensionBucketSizeFilter,
+						}
+						bucketSizeMetrics, err := cw.GetMetricStatistics(&input)
+						if err != nil {
+							fmt.Println("Error", err)
+						}
+						if bucketSizeMetrics != nil {
+							var minimumTimeDifference float64
+							var timeDifference float64
+							var averageValue *float64
+							minimumTimeDifference = -1
+							for _, datapoint := range bucketSizeMetrics.Datapoints {
+								timeDifference = time.Since(*datapoint.Timestamp).Seconds()
+								if minimumTimeDifference == -1 {
+									minimumTimeDifference = timeDifference
+									averageValue = datapoint.Average
+								} else if timeDifference < minimumTimeDifference {
+									minimumTimeDifference = timeDifference
+									averageValue = datapoint.Average
+								}
+							}
+							if averageValue != nil {
+								storageTypeSizesGB[storageType] = float64(*averageValue) / gbDivider
+							}
+							numBucketSizeDatapoints += len(bucketSizeMetrics.Datapoints)
 						}
 					}
 
@@ -291,7 +307,7 @@ func (m *awsResourceManager) BucketsPerAccount() map[string][]Bucket {
 					if err != nil {
 						fmt.Println("Error", err)
 					}
-					if len(bucketSizeMetrics.Datapoints) == 0 && len(numberOfObjectsMetrics.Datapoints) != 0 {
+					if numBucketSizeDatapoints == 0 && len(numberOfObjectsMetrics.Datapoints) != 0 {
 						fmt.Println("Warning: Got 0 datapoints from: ", *bu.Name)
 					}
 					if numberOfObjectsMetrics != nil {
@@ -337,6 +353,11 @@ func (m *awsResourceManager) BucketsPerAccount() map[string][]Bucket {
 						return
 					}
 
+					totalSizeGB := 0.0
+					for _, size := range storageTypeSizesGB {
+						totalSizeGB += size
+					}
+
 					buck := awsBucket{baseBucket{
 						baseResource: baseResource{
 							csp:          AWS,
@@ -346,9 +367,10 @@ func (m *awsResourceManager) BucketsPerAccount() map[string][]Bucket {
 							creationTime: *bu.CreationDate,
 							tags:         tags,
 						},
-						lastModified: lastMod,
-						objectCount:  numberOfObjects,
-						totalSizeGB:  float64(size) / gbDivider,
+						lastModified:       lastMod,
+						objectCount:        numberOfObjects,
+						totalSizeGB:        totalSizeGB,
+						storageTypeSizesGB: storageTypeSizesGB,
 					}}
 					buckChan <- &buck
 				}(bu, buckChan)
