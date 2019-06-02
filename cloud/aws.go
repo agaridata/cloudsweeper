@@ -12,6 +12,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/aws-sdk-go/service/sts"
+
 	"github.com/aws/aws-sdk-go/aws"
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -545,6 +547,25 @@ func getAllEC2Resources(accounts []string, funcToRun func(client *ec2.EC2, accou
 	forEachAccount(accounts, sess, func(account string, cred *credentials.Credentials) {
 		log.Println("Accessing account", account)
 		forEachAWSRegion(func(region string) {
+			// Check if region is enabled
+			stsClient := sts.New(sess, &aws.Config{
+				Credentials: cred,
+				Region:      aws.String(region),
+			})
+			_, err := stsClient.GetCallerIdentity(&sts.GetCallerIdentityInput{})
+			if err != nil {
+				// Ensure that we can make the default call, otherwise we have other problems
+				stsClient = sts.New(sess, &aws.Config{
+					Credentials: cred,
+				})
+				_, err = stsClient.GetCallerIdentity(&sts.GetCallerIdentityInput{})
+				if err == nil {
+					log.Printf("Region %s is disabled, skipping it!", region)
+					return
+				} else {
+					log.Fatalf("Unknown AWS error %s", err)
+				}
+			}
 			client := ec2.New(sess, &aws.Config{
 				Credentials: cred,
 				Region:      aws.String(region),
