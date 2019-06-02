@@ -569,7 +569,7 @@ func getAllEC2Resources(accounts []string, funcToRun func(client *ec2.EC2, accou
 	forEachAccount(accounts, sess, func(account string, cred *credentials.Credentials) {
 		log.Println("Accessing account", account)
 		forEachAWSRegion(func(region string) {
-			// Check if region is enabled
+			// Check if region is enabled by making a call that we should always have permissions for
 			stsClient := sts.New(sess, &aws.Config{
 				Credentials: cred,
 				Region:      aws.String(region),
