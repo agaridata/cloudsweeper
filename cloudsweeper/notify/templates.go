@@ -170,6 +170,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<table style="width: 100%;">
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Files</strong></th>
@@ -179,9 +181,9 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	{{ range $i, $bucket := .Buckets }}
 	<tr {{ if and (even $i) (not (whitelisted $bucket)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $bucket }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $bucket.Owner }}</td>
-			<td>{{ $bucket.ID }}</td>
 			<td>{{ productname $bucket }}</td>
 			<td>{{ rolename $bucket }}</td>
+			<td>{{ $bucket.ID }}</td>
 			<td>{{ printf "%.3f GB" $bucket.TotalSizeGB }}</td>
 			<td>{{ $bucket.ObjectCount }}</td>
 			<td>{{ modifiedInTheLast6Months $bucket.LastModified }}</td>
@@ -330,6 +332,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<table style="width: 100%;">
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Files</strong></th>
@@ -339,9 +343,9 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	{{ range $i, $bucket := .Buckets }}
 	<tr {{ if and (even $i) (not (whitelisted $bucket)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $bucket }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $bucket.Owner }}</td>
-			<td>{{ $bucket.ID }}</td>
 			<td>{{ productname $bucket }}</td>
 			<td>{{ rolename $bucket }}</td>
+			<td>{{ $bucket.ID }}</td>
 			<td>{{ printf "%.3f GB" $bucket.TotalSizeGB }}</td>
 			<td>{{ $bucket.ObjectCount }}</td>
 			<td>{{ modifiedInTheLast6Months $bucket.LastModified }}</td>
@@ -490,6 +494,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<table style="width: 100%;">
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Files</strong></th>
@@ -499,9 +505,9 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	{{ range $i, $bucket := .Buckets }}
 	<tr {{ if and (even $i) (not (whitelisted $bucket)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $bucket }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $bucket.Owner }}</td>
-			<td>{{ $bucket.ID }}</td>
 			<td>{{ productname $bucket }}</td>
 			<td>{{ rolename $bucket }}</td>
+			<td>{{ $bucket.ID }}</td>
 			<td>{{ printf "%.3f GB" $bucket.TotalSizeGB }}</td>
 			<td>{{ $bucket.ObjectCount }}</td>
 			<td>{{ modifiedInTheLast6Months $bucket.LastModified }}</td>
@@ -659,6 +665,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 	<table style="width: 100%;">
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Files</strong></th>
@@ -668,9 +676,9 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 	{{ range $i, $bucket := .Buckets }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
 			<td>{{ $bucket.Owner }}</td>
-			<td>{{ $bucket.ID }}</td>
 			<td>{{ productname $bucket }}</td>
 			<td>{{ rolename $bucket }}</td>
+			<td>{{ $bucket.ID }}</td>
 			<td>{{ printf "%.3f GB" $bucket.TotalSizeGB }}</td>
 			<td>{{ $bucket.ObjectCount }}</td>
 			<td>{{ modifiedInTheLast6Months $bucket.LastModified }}</td>
