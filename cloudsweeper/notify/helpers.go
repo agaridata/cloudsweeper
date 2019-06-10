@@ -108,6 +108,20 @@ func extraTemplateFunctions() template.FuncMap {
 				return ""
 			}
 		},
+		"productname": func(inst cloud.Instance) string {
+			product, exist := inst.Tags()["Product"]
+			if exist {
+				return product
+			}
+			return ""
+		},
+		"rolename": func(inst cloud.Instance) string {
+			role, exist := inst.Tags()["Role"]
+			if exist {
+				return role
+			}
+			return ""
+		},
 		"maybeRealName": func(account string, accountToUser map[string]string) string {
 			if name, ok := accountToUser[account]; ok {
 				return name
@@ -120,5 +134,6 @@ func extraTemplateFunctions() template.FuncMap {
 			}
 			return fmt.Sprintf("%s: %s", key, val)
 		},
+		""
 	}
 }

@@ -53,6 +53,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Name</strong></th>
 			<th><strong>Instance type</strong></th>
@@ -63,6 +65,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr {{ if and (even $i) (not (whitelisted $instance)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $instance }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $instance.Owner }}</td>
 			<td>{{ $instance.Location }}</td>
+			<td>{{ productname $instance }}</td>
+			<td>{{ rolename $instance }}</td>
 			<td>{{ $instance.ID }}</td>
 			<td>{{ instname $instance }}</td>
 			<td>{{ $instance.InstanceType }}</td>
@@ -79,6 +83,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Name</strong></th>
 			<th><strong>Created</strong></th>
@@ -88,6 +94,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $image)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $image }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $image.Owner }}</td>
 			<td>{{ $image.Location }}</td>
+			<td>{{ productname $image }}</td>
+			<td>{{ rolename $image }}</td>
 			<td>{{ $image.ID }}</td>
 			<td>{{ $image.Name }}</td>
 			<td>{{ fdate $image.CreationTime "2006-01-02" }} ({{ daysrunning $image.CreationTime }})</td>
@@ -103,6 +111,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Attached to instance</strong></th>
@@ -114,6 +124,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $volume)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $volume }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $volume.Owner }}</td>
 			<td>{{ $volume.Location }}</td>
+			<td>{{ productname $volume }}</td>
+			<td>{{ rolename $volume }}</td>
 			<td>{{ $volume.ID }}</td>
 			<td>{{ $volume.SizeGB }} GB</td>
 			<td>{{ yesno $volume.Attached }}</td>
@@ -131,6 +143,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Created</strong></th>
@@ -140,6 +154,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $snapshot)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $snapshot }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $snapshot.Owner }}</td>
 			<td>{{ $snapshot.Location }}</td>
+			<td>{{ productname $snapshot }}</td>
+			<td>{{ rolename $snapshot }}</td>
 			<td>{{ $snapshot.ID }}</td>
 			<td>{{ $snapshot.SizeGB }} GB</td>
 			<td>{{ fdate $snapshot.CreationTime "2006-01-02" }} ({{ daysrunning $snapshot.CreationTime }})</td>
@@ -164,6 +180,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $bucket)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $bucket }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $bucket.Owner }}</td>
 			<td>{{ $bucket.ID }}</td>
+			<td>{{ productname $bucket }}</td>
+			<td>{{ rolename $bucket }}</td>
 			<td>{{ printf "%.3f GB" $bucket.TotalSizeGB }}</td>
 			<td>{{ $bucket.ObjectCount }}</td>
 			<td>{{ modifiedInTheLast6Months $bucket.LastModified }}</td>
@@ -195,6 +213,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Name</strong></th>
 			<th><strong>Instance type</strong></th>
@@ -205,6 +225,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr {{ if and (even $i) (not (whitelisted $instance)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $instance }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $instance.Owner }}</td>
 			<td>{{ $instance.Location }}</td>
+			<td>{{ productname $instance }}</td>
+			<td>{{ rolename $instance }}</td>
 			<td>{{ $instance.ID }}</td>
 			<td>{{ instname $instance }}</td>
 			<td>{{ $instance.InstanceType }}</td>
@@ -221,6 +243,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Name</strong></th>
 			<th><strong>Created</strong></th>
@@ -230,6 +254,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $image)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $image }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $image.Owner }}</td>
 			<td>{{ $image.Location }}</td>
+			<td>{{ productname $image }}</td>
+			<td>{{ rolename $image }}</td>
 			<td>{{ $image.ID }}</td>
 			<td>{{ $image.Name }}</td>
 			<td>{{ fdate $image.CreationTime "2006-01-02" }} ({{ daysrunning $image.CreationTime }})</td>
@@ -245,6 +271,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Attached to instance</strong></th>
@@ -256,6 +284,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $volume)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $volume }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $volume.Owner }}</td>
 			<td>{{ $volume.Location }}</td>
+			<td>{{ productname $volume }}</td>
+			<td>{{ rolename $volume }}</td>
 			<td>{{ $volume.ID }}</td>
 			<td>{{ $volume.SizeGB }} GB</td>
 			<td>{{ yesno $volume.Attached }}</td>
@@ -273,6 +303,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Created</strong></th>
@@ -282,6 +314,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $snapshot)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $snapshot }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $snapshot.Owner }}</td>
 			<td>{{ $snapshot.Location }}</td>
+			<td>{{ productname $snapshot }}</td>
+			<td>{{ rolename $snapshot }}</td>
 			<td>{{ $snapshot.ID }}</td>
 			<td>{{ $snapshot.SizeGB }} GB</td>
 			<td>{{ fdate $snapshot.CreationTime "2006-01-02" }} ({{ daysrunning $snapshot.CreationTime }})</td>
@@ -306,6 +340,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $bucket)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $bucket }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $bucket.Owner }}</td>
 			<td>{{ $bucket.ID }}</td>
+			<td>{{ productname $bucket }}</td>
+			<td>{{ rolename $bucket }}</td>
 			<td>{{ printf "%.3f GB" $bucket.TotalSizeGB }}</td>
 			<td>{{ $bucket.ObjectCount }}</td>
 			<td>{{ modifiedInTheLast6Months $bucket.LastModified }}</td>
@@ -337,6 +373,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Name</strong></th>
 			<th><strong>Instance type</strong></th>
@@ -347,6 +385,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr {{ if and (even $i) (not (whitelisted $instance)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $instance }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $instance.Owner }}</td>
 			<td>{{ $instance.Location }}</td>
+			<td>{{ productname $instance }}</td>
+			<td>{{ rolename $instance }}</td>
 			<td>{{ $instance.ID }}</td>
 			<td>{{ instname $instance }}</td>
 			<td>{{ $instance.InstanceType }}</td>
@@ -363,6 +403,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Name</strong></th>
 			<th><strong>Created</strong></th>
@@ -372,6 +414,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $image)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $image }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $image.Owner }}</td>
 			<td>{{ $image.Location }}</td>
+			<td>{{ productname $image }}</td>
+			<td>{{ rolename $image }}</td>
 			<td>{{ $image.ID }}</td>
 			<td>{{ $image.Name }}</td>
 			<td>{{ fdate $image.CreationTime "2006-01-02" }} ({{ daysrunning $image.CreationTime }})</td>
@@ -387,6 +431,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Attached to instance</strong></th>
@@ -398,6 +444,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $volume)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $volume }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $volume.Owner }}</td>
 			<td>{{ $volume.Location }}</td>
+			<td>{{ productname $volume }}</td>
+			<td>{{ rolename $volume }}</td>
 			<td>{{ $volume.ID }}</td>
 			<td>{{ $volume.SizeGB }} GB</td>
 			<td>{{ yesno $volume.Attached }}</td>
@@ -415,6 +463,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Created</strong></th>
@@ -424,6 +474,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $snapshot)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $snapshot }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $snapshot.Owner }}</td>
 			<td>{{ $snapshot.Location }}</td>
+			<td>{{ productname $snapshot }}</td>
+			<td>{{ rolename $snapshot }}</td>
 			<td>{{ $snapshot.ID }}</td>
 			<td>{{ $snapshot.SizeGB }} GB</td>
 			<td>{{ fdate $snapshot.CreationTime "2006-01-02" }} ({{ daysrunning $snapshot.CreationTime }})</td>
@@ -448,6 +500,8 @@ Resources marked <span style="background-color: #c9fc99;">in green</span> are wh
 	<tr {{ if and (even $i) (not (whitelisted $bucket)) }}style="background-color: #f2f2f2;"{{ else if whitelisted $bucket }}style="background-color: #c9fc99;"{{ end }}>
 			<td>{{ $bucket.Owner }}</td>
 			<td>{{ $bucket.ID }}</td>
+			<td>{{ productname $bucket }}</td>
+			<td>{{ rolename $bucket }}</td>
 			<td>{{ printf "%.3f GB" $bucket.TotalSizeGB }}</td>
 			<td>{{ $bucket.ObjectCount }}</td>
 			<td>{{ modifiedInTheLast6Months $bucket.LastModified }}</td>
@@ -488,6 +542,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Name</strong></th>
 			<th><strong>Instance type</strong></th>
@@ -498,6 +554,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
 			<td>{{ $instance.Owner }}</td>
 			<td>{{ $instance.Location }}</td>
+			<td>{{ productname $instance }}</td>
+			<td>{{ rolename $instance }}</td>
 			<td>{{ $instance.ID }}</td>
 			<td>{{ instname $instance }}</td>
 			<td>{{ $instance.InstanceType }}</td>
@@ -514,6 +572,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Name</strong></th>
 			<th><strong>Created</strong></th>
@@ -523,6 +583,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
 			<td>{{ $image.Owner }}</td>
 			<td>{{ $image.Location }}</td>
+			<td>{{ productname $image }}</td>
+			<td>{{ rolename $image }}</td>
 			<td>{{ $image.ID }}</td>
 			<td>{{ $image.Name }}</td>
 			<td>{{ fdate $image.CreationTime "2006-01-02" }} ({{ daysrunning $image.CreationTime }})</td>
@@ -538,6 +600,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Attached to instance</strong></th>
@@ -549,6 +613,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
 			<td>{{ $volume.Owner }}</td>
 			<td>{{ $volume.Location }}</td>
+			<td>{{ productname $volume }}</td>
+			<td>{{ rolename $volume }}</td>
 			<td>{{ $volume.ID }}</td>
 			<td>{{ $volume.SizeGB }} GB</td>
 			<td>{{ yesno $volume.Attached }}</td>
@@ -566,6 +632,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 		<tr style="text-align:left;">
 			<th><strong>Account</strong></th>
 			<th><strong>Location</strong></th>
+			<th><strong>Product</strong></th>
+			<th><strong>Role</strong></th>
 			<th><strong>ID</strong></th>
 			<th><strong>Size (GB)</strong></th>
 			<th><strong>Created</strong></th>
@@ -575,6 +643,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
 			<td>{{ $snapshot.Owner }}</td>
 			<td>{{ $snapshot.Location }}</td>
+			<td>{{ productname $snapshot }}</td>
+			<td>{{ rolename $snapshot }}</td>
 			<td>{{ $snapshot.ID }}</td>
 			<td>{{ $snapshot.SizeGB }} GB</td>
 			<td>{{ fdate $snapshot.CreationTime "2006-01-02" }} ({{ daysrunning $snapshot.CreationTime }})</td>
@@ -599,6 +669,8 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
 			<td>{{ $bucket.Owner }}</td>
 			<td>{{ $bucket.ID }}</td>
+			<td>{{ productname $bucket }}</td>
+			<td>{{ rolename $bucket }}</td>
 			<td>{{ printf "%.3f GB" $bucket.TotalSizeGB }}</td>
 			<td>{{ $bucket.ObjectCount }}</td>
 			<td>{{ modifiedInTheLast6Months $bucket.LastModified }}</td>
