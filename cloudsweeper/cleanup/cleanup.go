@@ -206,8 +206,10 @@ func getAllButNLatestComponents(images []cloud.Image, componentsToKeep int) []cl
 			log.Fatalln("Times not found for some reason")
 			return time.Now().AddDate(-10, 0, 0)
 		}
-		if componentsToKeep > len(times) {
-			componentsToKeep = len(times)
+
+		updatedComponentsToKeep := componentsToKeep
+		if updatedComponentsToKeep > len(times) {
+			updatedComponentsToKeep = len(times)
 		}
 
 		sort.Slice(times, func(i, j int) bool {
@@ -215,7 +217,7 @@ func getAllButNLatestComponents(images []cloud.Image, componentsToKeep int) []cl
 			return times[i].After(times[j])
 		})
 
-		threshold := times[componentsToKeep-1]
+		threshold := times[updatedComponentsToKeep-1]
 		return threshold
 	}
 
