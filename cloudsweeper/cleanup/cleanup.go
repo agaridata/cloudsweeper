@@ -214,7 +214,7 @@ func getAllButNLatestComponents(images []cloud.Image, componentsToKeep int) []cl
 
 		minimumIndex := componentsToKeep
 		if minimumIndex > len(times) { 
-			minimumIndex := len(times)
+			minimumIndex = len(times)
 		}
 		threshold := times[minimumIndex-1]
 		return threshold
