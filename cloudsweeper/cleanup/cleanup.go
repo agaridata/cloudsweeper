@@ -207,17 +207,16 @@ func getAllButNLatestComponents(images []cloud.Image, componentsToKeep int) []cl
 			return time.Now().AddDate(-10, 0, 0)
 		}
 
-		updatedComponentsToKeep := componentsToKeep
-		if updatedComponentsToKeep > len(times) {
-			updatedComponentsToKeep = len(times)
-		}
-
 		sort.Slice(times, func(i, j int) bool {
 			// Sort times so that newest are first
 			return times[i].After(times[j])
 		})
 
-		threshold := times[updatedComponentsToKeep-1]
+		minimumIndex := componentsToKeep
+		if minimumIndex > len(times) { 
+			minimumIndex := len(times)
+		}
+		threshold := times[minimumIndex-1]
 		return threshold
 	}
 
