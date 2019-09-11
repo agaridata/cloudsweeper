@@ -145,10 +145,10 @@ func extraTemplateFunctions() template.FuncMap {
 				return ""
 			}
 			t, err := time.Parse(time.RFC3339, tag)
-			if err == nil {
-				return t.Format(format)
+			if err != nil {
+				return ""
 			}
-			return ""
+			return t.Format(format)
 		},
 	}
 }
