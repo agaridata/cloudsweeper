@@ -139,5 +139,16 @@ func extraTemplateFunctions() template.FuncMap {
 			}
 			return fmt.Sprintf("%s: %s", key, val)
 		},
+		"deletedate": func(res cloud.Resource, format string) string {
+			tag, exist := res.Tags()["cloudsweeper-delete-at"]
+			if !exist {
+				return ""
+			}
+			t, err := time.Parse(time.RFC3339, tag)
+			if err == nil {
+				return t.Format(format)
+			}
+			return ""
+		},
 	}
 }
