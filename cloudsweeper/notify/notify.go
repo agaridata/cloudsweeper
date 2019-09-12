@@ -238,7 +238,7 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 		totalSummaryMailData.Buckets = append(totalSummaryMailData.Buckets, userMailData.Buckets...)
 
 		if userMailData.ResourceCount() > 0 {
-			title := fmt.Sprintf("You have %d old resources to review (%s)", userMailData.ResourceCount(), time.Now().Format("2006-01-02"))
+			title := fmt.Sprintf("Review Notification (%d resources) (%s)", userMailData.ResourceCount(), time.Now().Format("2006-01-02"))
 			userMailData.SendEmail(getMailClient(c), c.config.EmailDomain, reviewMailTemplate, title)
 		}
 	}
@@ -285,7 +285,7 @@ func (c *Client) UntaggedResourcesReview(mngr cloud.ResourceManager, accountUser
 
 		if mailData.ResourceCount() > 0 {
 			// Send mail
-			title := fmt.Sprintf("You have %d un-tagged resources to review (%s)", mailData.ResourceCount(), time.Now().Format("2006-01-02"))
+			title := fmt.Sprintf("Untagged Notification (%d resources) (%s)", mailData.ResourceCount(), time.Now().Format("2006-01-02"))
 			// You can add some debug email address to ensure it works
 			// debugAddressees := []string{"ben@example.com"}
 			// mailData.SendEmail(getMailClient(c), c.config.EmailDomain, untaggedMailTemplate, title, debugAddressees...)
@@ -321,7 +321,7 @@ func (c *Client) DeletionWarning(hoursInAdvance int, mngr cloud.ResourceManager,
 
 		if mailData.ResourceCount() > 0 {
 			// Send email
-			title := fmt.Sprintf("Deletion warning, %d resources are cleaned up within %d hours", mailData.ResourceCount(), hoursInAdvance)
+			title := fmt.Sprintf("Deletion Warning (%d resources)", mailData.ResourceCount())
 			mailData.SendEmail(getMailClient(c), c.config.EmailDomain, deletionWarningTemplate, title)
 		}
 	}
@@ -368,7 +368,7 @@ func (c *Client) MarkingDryRunReport(taggedResources map[string]*cloud.AllResour
 
 		if mailData.ResourceCount() > 0 {
 			// Send email
-			title := fmt.Sprintf("Marking Dry Run Warning. The following resources would have been marked for deletion:")
+			title := fmt.Sprintf("Dry Run Notification (%d resources)", mailData.ResourceCount())
 			mailData.SendEmail(getMailClient(c), c.config.EmailDomain, markingDryRunTemplate, title)
 		}
 	}

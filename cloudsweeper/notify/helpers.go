@@ -51,6 +51,51 @@ func getMailClient(notifyClient *Client) mailer.Client {
 	return mailer.NewClient(username, password, displayName, from, server, port)
 }
 
+func timeUntilEarliestDeletion(resourceCollection cloud.AllResourceCollection) string {
+
+	// Initialize to something bigger than time to deletion
+	earliestTime := time.Now().AddDate(0, 0, 99999)
+
+	resources := []cloud.Resource{}
+	for _, res := range resourceCollection.Instances {
+		resources = append(resources, res.(cloud.Resource))
+	}
+	for _, res := range resourceCollection.Images {
+		resources = append(resources, res.(cloud.Resource))
+	}
+	for _, res := range resourceCollection.Snapshots {
+		resources = append(resources, res.(cloud.Resource))
+	}
+	for _, res := range resourceCollection.Volumes {
+		resources = append(resources, res.(cloud.Resource))
+	}
+	for _, res := range resourceCollection.Buckets {
+		resources = append(resources, res.(cloud.Resource))
+	}
+
+	for _, res := range resources {
+		tempTag, exists := res.Tags()["cloudsweeper-delete-at"]
+		if !exists {
+			continue
+		}
+		tempTime, err := time.Parse(time.RFC3339, tempTag)
+		if err != nil {
+			continue
+		}
+		if earliestTime.After(tempTime) {
+			earliestTime = tempTime
+		}
+	}
+
+	// TODO: Avoid hardcoding the time until deletion value
+	if earliestTime.After(time.Now().AddDate(0, 0, 4)) {
+		return "96"
+	} else {
+		hours := time.Until(earliestTime).Hours()
+		return fmt.Sprintf("%d", int(hours))
+	}
+}
+
 func accumulatedCost(res cloud.Resource) float64 {
 	days := time.Now().Sub(res.CreationTime()).Hours() / 24.0
 	costPerDay := billing.ResourceCostPerDay(res)
@@ -149,6 +194,16 @@ func extraTemplateFunctions() template.FuncMap {
 				return ""
 			}
 			return t.Format(format)
+		},
+		// TODO: This isn't pretty whatsoever
+		"timeUntilDelete": func(instances []cloud.Instance, images []cloud.Image, snapshots []cloud.Snapshot, volumes []cloud.Volume, buckets []cloud.Bucket) string {
+			allResources := cloud.AllResourceCollection{}
+			allResources.Instances = instances
+			allResources.Images = images
+			allResources.Snapshots = snapshots
+			allResources.Volumes = volumes
+			allResources.Buckets = buckets
+			return timeUntilEarliestDeletion(allResources)
 		},
 	}
 }

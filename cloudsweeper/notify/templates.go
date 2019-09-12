@@ -525,7 +525,10 @@ Your loyal Cloudsweeper
 
 const deletionWarningTemplate = `<h1>Hello {{ .Owner -}},</h1>
 
-<h2>Resources will be cleaned up within {{ .HoursInAdvance }} hours</h2>
+<h2>Some of these resources will start being cleaned up 
+in {{ timeUntilDelete .Instances .Images .Snapshots .Volumes .Buckets }} 
+hours. To see the specific time(s), observe the deletion date column.</h2>
+
 <p>
 Unless you take action, the resources listed below will be cleaned up
 from your account within the next {{ .HoursInAdvance }} hours. <b>Make sure
@@ -555,7 +558,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Location</strong></th>
 			<th><strong>Created</strong></th>
 			<th><strong>Total cost</strong></th>
-			<th><strong>Deletion date</strong></th>
+			<th><strong>Deletion date (Eastern time)</strong></th>
 		</tr>
 	{{ range $i, $instance := .Instances }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
@@ -586,7 +589,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Location</strong></th>
 			<th><strong>Created</strong></th>
 			<th><strong>Total cost</strong></th>
-			<th><strong>Deletion date</strong></th>
+			<th><strong>Deletion date (Eastern time)</strong></th>
 		</tr>
 	{{ range $i, $image := .Images }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
@@ -618,7 +621,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Created</strong></th>
 			<th><strong>Volume type</strong></th>
 			<th><strong>Total cost</strong></th>
-			<th><strong>Deletion date</strong></th>
+			<th><strong>Deletion date (Eastern time)</strong></th>
 		</tr>
 	{{ range $i, $volume := .Volumes }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
@@ -650,7 +653,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Location</strong></th>
 			<th><strong>Created</strong></th>
 			<th><strong>Total cost</strong></th>
-			<th><strong>Deletion date</strong></th>
+			<th><strong>Deletion date (Eastern time)</strong></th>
 		</tr>
 	{{ range $i, $snapshot := .Snapshots }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
@@ -680,7 +683,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Files</strong></th>
 			<th><strong>Modified in < 6 months</strong></th>
 			<th><strong>Monthly cost</strong></th>
-			<th><strong>Deletion date</strong></th>
+			<th><strong>Deletion date (Eastern time)</strong></th>
 		</tr>
 	{{ range $i, $bucket := .Buckets }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
