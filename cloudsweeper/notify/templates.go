@@ -558,7 +558,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Location</strong></th>
 			<th><strong>Created</strong></th>
 			<th><strong>Total cost</strong></th>
-			<th><strong>Deletion date (Eastern time)</strong></th>
+			<th><strong>Deletion date</strong></th>
 		</tr>
 	{{ range $i, $instance := .Instances }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
@@ -571,7 +571,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<td>{{ $instance.Location }}</td>
 			<td>{{ fdate $instance.CreationTime "2006-01-02" }} ({{ daysrunning $instance.CreationTime }})</td>
 			<td>{{ accucost $instance }}</td>
-			<td>{{ deletedate $instance "2006-01-02 (03:04 PM)" }}</td>	
+			<td>{{ deletedate $instance "2006-01-02 (03:04 PM ET)" }}</td>	
 		</tr>
 	{{ end }}
 	</table>
@@ -589,7 +589,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Location</strong></th>
 			<th><strong>Created</strong></th>
 			<th><strong>Total cost</strong></th>
-			<th><strong>Deletion date (Eastern time)</strong></th>
+			<th><strong>Deletion date</strong></th>
 		</tr>
 	{{ range $i, $image := .Images }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
@@ -601,7 +601,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<td>{{ $image.Location }}</td>
 			<td>{{ fdate $image.CreationTime "2006-01-02" }} ({{ daysrunning $image.CreationTime }})</td>
 			<td>{{ accucost $image }}</td>
-			<td>{{ deletedate $image "2006-01-02 (03:04 PM)" }}</td>
+			<td>{{ deletedate $image "2006-01-02 (03:04 PM ET)" }}</td>
 		</tr>
 	{{ end }}
 	</table>
@@ -621,7 +621,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Created</strong></th>
 			<th><strong>Volume type</strong></th>
 			<th><strong>Total cost</strong></th>
-			<th><strong>Deletion date (Eastern time)</strong></th>
+			<th><strong>Deletion date</strong></th>
 		</tr>
 	{{ range $i, $volume := .Volumes }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
@@ -635,7 +635,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<td>{{ fdate $volume.CreationTime "2006-01-02" }} ({{ daysrunning $volume.CreationTime }})</td>
 			<td>{{ $volume.VolumeType }}</td>
 			<td>{{ accucost $volume }}</td>
-			<td>{{ deletedate $volume "2006-01-02 (03:04 PM)" }}</td>
+			<td>{{ deletedate $volume "2006-01-02 (03:04 PM ET)" }}</td>
 		</tr>
 	{{ end }}
 	</table>
@@ -653,7 +653,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Location</strong></th>
 			<th><strong>Created</strong></th>
 			<th><strong>Total cost</strong></th>
-			<th><strong>Deletion date (Eastern time)</strong></th>
+			<th><strong>Deletion date</strong></th>
 		</tr>
 	{{ range $i, $snapshot := .Snapshots }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
@@ -665,7 +665,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<td>{{ $snapshot.Location }}</td>
 			<td>{{ fdate $snapshot.CreationTime "2006-01-02" }} ({{ daysrunning $snapshot.CreationTime }})</td>
 			<td>{{ accucost $snapshot }}</td>
-			<td>{{ deletedate $snapshot "2006-01-02 (03:04 PM)" }}</td>
+			<td>{{ deletedate $snapshot "2006-01-02 (03:04 PM ET)" }}</td>
 		</tr>
 	{{ end }}
 	</table>
@@ -683,7 +683,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<th><strong>Files</strong></th>
 			<th><strong>Modified in < 6 months</strong></th>
 			<th><strong>Monthly cost</strong></th>
-			<th><strong>Deletion date (Eastern time)</strong></th>
+			<th><strong>Deletion date</strong></th>
 		</tr>
 	{{ range $i, $bucket := .Buckets }}
 		<tr {{ if even $i }}style="background-color: #f2f2f2;"{{ end }}>
@@ -695,7 +695,7 @@ Read more about how Cloudsweeper works and how to better tag your resources at
 			<td>{{ $bucket.ObjectCount }}</td>
 			<td>{{ modifiedInTheLast6Months $bucket.LastModified }}</td>
 			<td>{{ printf "$%.3f" (bucketcost $bucket) }}</td>
-			<td>{{ deletedate $bucket "2006-01-02 (03:04 PM)" }}</td>
+			<td>{{ deletedate $bucket "2006-01-02 (03:04 PM ET)" }}</td>
 		</tr>
 	{{ end }}
 	</table>
@@ -709,10 +709,11 @@ Your loyal Cloudsweeper
 
 const markingDryRunTemplate = `<h1>Hello {{ .Owner -}},</h1>
 
-<h2>Resources would have been deleted if this was not a dry run</h2>
-<p>
-These are the resources that would have been marked if this was a real run. Please
-look over these and make sure everything is in order. </p>
+<h2>These resources would have been marked for deletion if this was not a dry run.</h2>
+
+<p>This was most likely done as a test. If you want to avoid seeing one of these
+resources in a future email, add a <b>cloudsweeper-whitelisted</b> tag to your resource.</p>
+
 
 <p>
 If you want to save any of these resources, add a tag with the key <b>whitelisted</b>
