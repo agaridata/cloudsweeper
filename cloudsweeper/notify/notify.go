@@ -260,16 +260,16 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 }
 
 // UntaggedResourcesReview will look for resources without any tags, and
-// send out a mail encouraging to tag tag them
+// send out a mail encouraging people to tag them
 func (c *Client) UntaggedResourcesReview(mngr cloud.ResourceManager, accountUserMapping map[string]string) {
-	// We only care about untagged resources in EC2
 	allCompute := mngr.AllResourcesPerAccount()
+	allBuckets := mngr.BucketsPerAccount()
 	for account, resources := range allCompute {
 		log.Printf("Performing untagged resources review in %s", account)
 		untaggedFilter := filter.New()
 		untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
 
-		// We care about un-tagged whitelisted resources too
+		// We care about untagged whitelisted resources too
 		untaggedFilter.OverrideWhitelist = true
 
 		username := accountUserMapping[account]
@@ -277,11 +277,13 @@ func (c *Client) UntaggedResourcesReview(mngr cloud.ResourceManager, accountUser
 			Owner:     username,
 			OwnerID:   account,
 			Instances: filter.Instances(resources.Instances, untaggedFilter),
-			// Only report on instances for now
-			//Images:    filter.Images(resources.Images, untaggedFilter),
+			Images:    filter.Images(resources.Images, untaggedFilter),
 			//Snapshots: filter.Snapshots(resources.Snapshots, untaggedFilter),
 			//Volumes:   filter.Volumes(resources.Volumes, untaggedFilter),
 			Buckets: []cloud.Bucket{},
+		}
+		if buckets, ok := allBuckets[account]; ok {
+			mailData.Buckets = filter.Buckets(buckets, untaggedFilter)
 		}
 
 		if mailData.ResourceCount() > 0 {
