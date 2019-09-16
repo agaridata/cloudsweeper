@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"strconv"
 	"time"
 
 	"github.com/cloudtools/cloudsweeper/cloud"
@@ -91,8 +92,8 @@ func timeUntilEarliestDeletion(resourceCollection cloud.AllResourceCollection) s
 	if earliestTime.After(time.Now().AddDate(0, 0, 4)) {
 		return "96"
 	} else {
-		hours := time.Until(earliestTime).Hours()
-		return fmt.Sprintf("%d", int(hours))
+		hours := int(time.Until(earliestTime).Hours())
+		return strconv.Itoa(hours)
 	}
 }
 
