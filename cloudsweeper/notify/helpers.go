@@ -88,13 +88,8 @@ func timeUntilEarliestDeletion(resourceCollection cloud.AllResourceCollection) s
 		}
 	}
 
-	// TODO: Avoid hardcoding the time until deletion value
-	if earliestTime.After(time.Now().AddDate(0, 0, 4)) {
-		return "96"
-	} else {
-		hours := int(time.Until(earliestTime).Hours())
-		return strconv.Itoa(hours)
-	}
+	hours := int(time.Until(earliestTime).Hours())
+	return strconv.Itoa(hours)
 }
 
 func accumulatedCost(res cloud.Resource) float64 {
