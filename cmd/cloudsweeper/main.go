@@ -63,7 +63,7 @@ var (
 		"clean-instances-older-than-days",
 		"clean-images-older-than-days",
 		"clean-snapshots-older-than-days",
-		"clean-unattatched-older-than-days",
+		"clean-unattached-older-than-days",
 		"clean-bucket-not-modified-days",
 		"clean-bucket-older-than-days",
 		"clean-keep-n-component-images",
@@ -78,14 +78,14 @@ var (
 	}
 
 	// Clean thresholds
-	cleanUntaggedOlderThanDays    = flag.String("clean-untagged-older-than-days", "", "Clean untagged resources if older than X days (default: 30)")
-	cleanInstancesOlderThanDays   = flag.String("clean-instances-older-than-days", "", "Clean if instance is older than X days (default: 182)")
-	cleanImagesOlderThanDays      = flag.String("clean-images-older-than-days", "", "Clean if image is older than X days (default: 182)")
-	cleanSnapshotsOlderThanDays   = flag.String("clean-snapshots-older-than-days", "", "Clean if snapshot is older than X days (default: 182)")
-	cleanUnattatchedOlderThanDays = flag.String("clean-unattatched-older-than-days", "", "Clean unattached volumes older than X days (default: 30)")
-	cleanBucketNotModifiedDays    = flag.String("clean-bucket-not-modified-days", "", "Clean s3 bucket if not modified for more than X days (default: 182)")
-	cleanBucketOlderThanDays      = flag.String("clean-bucket-older-than-days", "", "Clean s3 bucket if older than X days (default: 7)")
-	cleanKeepNComponentImages     = flag.String("clean-keep-n-component-images", "", "Clean images with component-date naming that are older than the N most recent ones (default: 2)")
+	cleanUntaggedOlderThanDays   = flag.String("clean-untagged-older-than-days", "", "Clean untagged resources if older than X days (default: 30)")
+	cleanInstancesOlderThanDays  = flag.String("clean-instances-older-than-days", "", "Clean if instance is older than X days (default: 182)")
+	cleanImagesOlderThanDays     = flag.String("clean-images-older-than-days", "", "Clean if image is older than X days (default: 182)")
+	cleanSnapshotsOlderThanDays  = flag.String("clean-snapshots-older-than-days", "", "Clean if snapshot is older than X days (default: 182)")
+	cleanUnattachedOlderThanDays = flag.String("clean-unattached-older-than-days", "", "Clean unattached volumes older than X days (default: 30)")
+	cleanBucketNotModifiedDays   = flag.String("clean-bucket-not-modified-days", "", "Clean s3 bucket if not modified for more than X days (default: 182)")
+	cleanBucketOlderThanDays     = flag.String("clean-bucket-older-than-days", "", "Clean s3 bucket if older than X days (default: 7)")
+	cleanKeepNComponentImages    = flag.String("clean-keep-n-component-images", "", "Clean images with component-date naming that are older than the N most recent ones (default: 2)")
 
 	//  Notify thresholds
 	notifyUntaggedOlderThanDays  = flag.String("notify-untagged-older-than-days", "", "Notify if untagged resource is older than X days (default: 14)")
