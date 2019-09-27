@@ -265,21 +265,33 @@ func (c *Client) UntaggedResourcesReview(mngr cloud.ResourceManager, accountUser
 		untaggedFilter := filter.New()
 		untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
 
+		tagFilter1 := filter.New()
+		tagFilter1.AddGeneralRule(filter.Negate(filter.HasTag("env")))
+
+		tagFilter2 := filter.New()
+		tagFilter2.AddGeneralRule(filter.Negate(filter.HasTag("role")))
+
+		tagFilter3 := filter.New()
+		tagFilter3.AddGeneralRule(filter.Negate(filter.HasTag("product")))
+
 		// We care about untagged whitelisted resources too
 		untaggedFilter.OverrideWhitelist = true
+		tagFilter1.OverrideWhitelist = true
+		tagFilter2.OverrideWhitelist = true
+		tagFilter3.OverrideWhitelist = true
 
 		username := accountUserMapping[account]
 		mailData := resourceMailData{
 			Owner:     username,
 			OwnerID:   account,
-			Instances: filter.Instances(resources.Instances, untaggedFilter),
-			Images:    filter.Images(resources.Images, untaggedFilter),
+			Instances: filter.Instances(resources.Instances, untaggedFilter, tagFilter1, tagFilter2, tagFilter3),
+			Images:    filter.Images(resources.Images, untaggedFilter, tagFilter1, tagFilter2, tagFilter3),
 			//Snapshots: filter.Snapshots(resources.Snapshots, untaggedFilter),
 			//Volumes:   filter.Volumes(resources.Volumes, untaggedFilter),
 			Buckets: []cloud.Bucket{},
 		}
 		if buckets, ok := allBuckets[account]; ok {
-			mailData.Buckets = filter.Buckets(buckets, untaggedFilter)
+			mailData.Buckets = filter.Buckets(buckets, untaggedFilter, tagFilter1, tagFilter2, tagFilter3)
 		}
 
 		if mailData.ResourceCount() > 0 {
