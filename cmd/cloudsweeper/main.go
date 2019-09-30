@@ -54,7 +54,8 @@ var (
 
 	findResourceID = flag.String("resource-id", "", "ID of resource to find with find-resource command")
 
-	dryRun = flag.Bool("marking-dry-run", false, "Whether to perform a dry run for mark and delete (nothing will actually be marked)")
+	dryRun       = flag.Bool("marking-dry-run", false, "Whether to perform a dry run for mark and delete (nothing will actually be marked)")
+	requiredTags = flag.String("required-tags", "", "Required tags separated by commas")
 
 	// Thresholds
 	thresholds = make(map[string]int)
@@ -113,6 +114,7 @@ func main() {
 	flag.Parse()
 	loadThresholds()
 	csp := cspFromConfig(findConfig("csp"))
+	tags := tagsFromConfig(findConfig("required-tags"))
 	log.Printf("Running against %s...\n", csp)
 	switch getPositionalCmd() {
 	case "cleanup":
@@ -178,7 +180,7 @@ func main() {
 		mngr := initManager(csp, org)
 		mapping := org.AccountToUserMapping(csp)
 		client := initNotifyClient()
-		client.UntaggedResourcesReview(mngr, mapping)
+		client.UntaggedResourcesReview(mngr, mapping, tags)
 	case "find-resource":
 		id := *findResourceID
 		if id == "" {
@@ -260,4 +262,15 @@ func cspFromConfig(rawFlag string) cloud.CSP {
 		os.Exit(1)
 		return cloud.AWS
 	}
+}
+
+func tagsFromConfig(rawFlag string) []string {
+	tags := strings.Split(rawFlag, ",")
+	for _, tag := range tags {
+		if len(tag) == 0 {
+			log.Fatalln("Empty tag detected")
+			return []string{}
+		}
+	}
+	return tags
 }

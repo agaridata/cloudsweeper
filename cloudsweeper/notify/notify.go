@@ -257,13 +257,14 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 
 // UntaggedResourcesReview will look for resources without any tags, and
 // send out a mail encouraging people to tag them
-func (c *Client) UntaggedResourcesReview(mngr cloud.ResourceManager, accountUserMapping map[string]string) {
+func (c *Client) UntaggedResourcesReview(mngr cloud.ResourceManager, accountUserMapping map[string]string, tags []string) {
 	allCompute := mngr.AllResourcesPerAccount()
 	allBuckets := mngr.BucketsPerAccount()
 	for account, resources := range allCompute {
 		log.Printf("Performing untagged resources review in %s", account)
 		untaggedFilter := filter.New()
 		untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
+		untaggedFilter.AddGeneralRule(filter.Negate(filter.HasRequiredTags(tags)))
 
 		// We care about untagged whitelisted resources too
 		untaggedFilter.OverrideWhitelist = true
