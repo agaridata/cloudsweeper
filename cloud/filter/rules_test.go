@@ -165,7 +165,7 @@ func TestHasTag(t *testing.T) {
 	}
 }
 
-func TestHasRequiredTags(t *testing.T) {
+func TestHasTags(t *testing.T) {
 	tags := make(map[string]string)
 	tags["env"] = "testenv"
 	tags["role"] = "testrole"
@@ -175,11 +175,11 @@ func TestHasRequiredTags(t *testing.T) {
 
 	foo := &testResource{time.Now(), tags}
 
-	if !HasRequiredTags(required)(foo) {
+	if !HasTags(required)(foo) {
 		t.Error("Resource should have these tags")
 	}
 
-	if HasRequiredTags(wrong)(foo) {
+	if HasTags(wrong)(foo) {
 		t.Error("Resource does not have these tags")
 	}
 }

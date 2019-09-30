@@ -264,7 +264,7 @@ func (c *Client) UntaggedResourcesReview(mngr cloud.ResourceManager, accountUser
 		log.Printf("Performing untagged resources review in %s", account)
 		untaggedFilter := filter.New()
 		untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
-		untaggedFilter.AddGeneralRule(filter.Negate(filter.HasRequiredTags(tags)))
+		untaggedFilter.AddGeneralRule(filter.Negate(filter.HasTags(tags)))
 
 		// We care about untagged whitelisted resources too
 		untaggedFilter.OverrideWhitelist = true

@@ -125,8 +125,8 @@ func IsUntaggedWithException(exceptionTag string) func(cloud.Resource) bool {
 	}
 }
 
-// HasRequiredTags checks whether a resource has a list of tags
-func HasRequiredTags(requiredKeys []string) func(cloud.Resource) bool {
+// HasTags checks whether a resource has a list of tags
+func HasTags(requiredKeys []string) func(cloud.Resource) bool {
 	return func(r cloud.Resource) bool {
 		for _, requiredKey := range requiredKeys {
 			if !HasTag(requiredKey)(r) {
