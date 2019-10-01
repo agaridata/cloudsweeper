@@ -114,7 +114,6 @@ func main() {
 	flag.Parse()
 	loadThresholds()
 	csp := cspFromConfig(findConfig("csp"))
-	tags := tagsFromConfig(findConfig("required-tags"))
 	log.Printf("Running against %s...\n", csp)
 	switch getPositionalCmd() {
 	case "cleanup":
@@ -180,6 +179,7 @@ func main() {
 		mngr := initManager(csp, org)
 		mapping := org.AccountToUserMapping(csp)
 		client := initNotifyClient()
+		tags := tagsFromConfig(findConfig("required-tags"))
 		client.UntaggedResourcesReview(mngr, mapping, tags)
 	case "find-resource":
 		id := *findResourceID
@@ -268,7 +268,7 @@ func tagsFromConfig(rawFlag string) []string {
 	tags := strings.Split(rawFlag, ",")
 	for _, tag := range tags {
 		if len(tag) == 0 {
-			log.Fatalln("Empty tag detected")
+			log.Println("Empty tag detected from config")
 			return []string{}
 		}
 	}

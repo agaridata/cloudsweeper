@@ -67,7 +67,7 @@ var configMapping = map[string]lookup{
 	"notify-whitelist-older-than-days":  lookup{"NOTIFY_WHITELIST_OLDER_THAN_DAYS", "182"},
 	"notify-dnd-older-than-days":        lookup{"NOTIFY_DND_OLDER_THAN_DAYS", "7"},
 
-	"required-tags": lookup{"REQUIRED_TAGS", ""},
+	"required-tags": lookup{"REQUIRED_TAGS", optionalDefault},
 }
 
 func loadConfig() {
