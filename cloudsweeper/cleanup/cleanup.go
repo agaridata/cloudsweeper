@@ -190,34 +190,30 @@ func MarkForCleanup(mngr cloud.ResourceManager, thresholds map[string]int, dryRu
 			}
 		}
 
-		if dryRun {
-			log.Printf("Not tagging resources since this is a dry run")
-		} else if totalCost < totalCostThreshold {
-			log.Printf("%s: Skipping the tagging of resources, total cost $%.2f is less than $%.2f", owner, totalCost, totalCostThreshold)
-		} else {
-			// Tag special cases
-			for _, res := range tagListUnnamedInstances {
-				err := res.SetTag(filter.DeleteTagKey, timeToDeleteUnnamedInstances.Format(time.RFC3339), true)
-				if err != nil {
-					log.Printf("%s: Failed to tag %s for deletion: %s\n", owner, res.ID(), err)
-				} else {
-					log.Printf("%s: Marked %s for deletion at %s\n", owner, res.ID(), timeToDeleteUnnamedInstances)
-				}
-			}
+		log.Printf("%s: Attempting to apply tags to resources")
+		applyTags(tagListGeneral, timeToDeleteGeneral, totalCost, dryRun)
+		applyTags(tagListUnnamedInstances, timeToDeleteUnnamedInstances, totalCost, dryRun)
 
-			// Tag general cases
-			for _, res := range tagListGeneral {
-				err := res.SetTag(filter.DeleteTagKey, timeToDeleteGeneral.Format(time.RFC3339), true)
-				if err != nil {
-					log.Printf("%s: Failed to tag %s for deletion: %s\n", owner, res.ID(), err)
-				} else {
-					log.Printf("%s: Marked %s for deletion at %s\n", owner, res.ID(), timeToDeleteGeneral)
-				}
-			}
-		}
 		allResourcesToTag[owner] = &resourcesToTag
 	}
 	return allResourcesToTag
+}
+
+func applyTags(resources []cloud.Resource, timeToDelete Time, totalCost float, dryRun bool) {
+	if dryRun {
+		log.Printf("Resources not tagged since this is a dry run")
+	} else if totalCost < totalCostThreshold {
+		log.Printf("Resources not tagged since the total cost $%.2f is less than $%.2f", totalCost, totalCostThreshold)
+	} else {
+		for _, res := range resources {
+			err := res.SetTag(filter.DeleteTagKey, timeToDelete.Format(time.RFC3339), true)
+			if err != nil {
+				log.Printf("Failed to tag %s for deletion: %s\n", res.ID(), err)
+			} else {
+				log.Printf("Marked %s for deletion at %s\n", res.ID(), timeToDelete)
+			}
+		}
+	}
 }
 
 // GetAllButNLatestComponents will look at AMIs, and return all but the two latest for each
