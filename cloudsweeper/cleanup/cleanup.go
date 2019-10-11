@@ -15,7 +15,6 @@ import (
 
 const (
 	totalCostThreshold = 10.0
-	nameTag            = nameTag
 )
 
 // MarkForCleanup will look for resources that should be automatically
@@ -60,7 +59,7 @@ func MarkForCleanup(mngr cloud.ResourceManager, thresholds map[string]int, dryRu
 
 		// General filters
 		untaggedFilter := filter.New()
-		untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException(nameTag))
+		untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
 		untaggedFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("clean-untagged-older-than-days", thresholds)))
 		untaggedFilter.AddSnapshotRule(filter.IsNotInUse())
 		untaggedFilter.AddGeneralRule(filter.Negate(filter.TaggedForCleanup()))
@@ -73,8 +72,8 @@ func MarkForCleanup(mngr cloud.ResourceManager, thresholds map[string]int, dryRu
 
 		noNameFilter := filter.New()
 		noNameFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("clean-untagged-older-than-days", thresholds))) // TODO: Remove?
-		noNameFilter.AddGeneralRule(filter.IsUntaggedWithException(nameTag))
-		noNameFilter.AddGeneralRule(filter.Negate(filter.HasTag(nameTag)))
+		noNameFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
+		noNameFilter.AddGeneralRule(filter.Negate(filter.HasTag("Name")))
 		noNameFilter.AddGeneralRule(filter.Negate(filter.TaggedForCleanup()))
 
 		// Helper map to avoid duplicated images
