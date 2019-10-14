@@ -168,6 +168,7 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 	// Create filters
 	instanceFilter := filter.New()
 	instanceFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-instances-older-than-days", thresholds)))
+	instanceFilter.AddGeneralRule(filter.Negate(filter.HasTag("cloudsweeper-do-not-delete")))
 
 	imageFilter := filter.New()
 	imageFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-images-older-than-days", thresholds)))
@@ -186,12 +187,14 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 	whitelistFilter := filter.New()
 	whitelistFilter.OverrideWhitelist = true
 	whitelistFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-whitelist-older-than-days", thresholds)))
+	whitelistFilter.AddGeneralRule(filter.Negate(filter.HasTag("cloudsweeper-do-not-delete")))
 
 	untaggedFilter := filter.New()
 	untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
 	untaggedFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-untagged-older-than-days", thresholds)))
 	untaggedFilter.AddSnapshotRule(filter.IsNotInUse())
 	untaggedFilter.AddVolumeRule(filter.IsUnattached())
+	untaggedFilter.AddGeneralRule(filter.Negate(filter.HasTag("cloudsweeper-do-not-delete")))
 
 	// This only applies to instances
 	dndFilter := filter.New()
