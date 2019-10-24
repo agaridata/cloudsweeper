@@ -191,7 +191,7 @@ func MarkForCleanup(mngr cloud.ResourceManager, thresholds map[string]int, dryRu
 			}
 		}
 
-		log.Printf("%s: Attempting to apply tags to resources")
+		log.Printf("%s: Attempting to apply tags to resources", owner)
 		applyTags(tagListGeneral, timeToDeleteGeneral, totalCost, dryRun)
 		applyTags(tagListUnnamedInstances, timeToDeleteUnnamedInstances, totalCost, dryRun)
 
@@ -200,7 +200,7 @@ func MarkForCleanup(mngr cloud.ResourceManager, thresholds map[string]int, dryRu
 	return allResourcesToTag
 }
 
-func applyTags(resources []cloud.Resource, timeToDelete Time, totalCost float, dryRun bool) {
+func applyTags(resources []cloud.Resource, timeToDelete time.Time, totalCost float64, dryRun bool) {
 	if dryRun {
 		log.Printf("Resources not tagged since this is a dry run")
 	} else if totalCost < totalCostThreshold {
