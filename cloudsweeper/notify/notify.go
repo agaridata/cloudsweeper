@@ -211,9 +211,9 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 			Owner:     username,
 			Instances: filter.Instances(resources.Instances, instanceFilter, whitelistFilter, dndFilter, untaggedFilter),
 			Images:    filter.Images(resources.Images, imageFilter, whitelistFilter, untaggedFilter),
-			Volumes:   filter.Volumes(resources.Volumes, volumeFilter, whitelistFilter, untaggedFilter),
-			Snapshots: filter.Snapshots(resources.Snapshots, snapshotFilter, whitelistFilter, untaggedFilter),
-			Buckets:   []cloud.Bucket{},
+			//Volumes:   filter.Volumes(resources.Volumes, volumeFilter, whitelistFilter, untaggedFilter),
+			//Snapshots: filter.Snapshots(resources.Snapshots, snapshotFilter, whitelistFilter, untaggedFilter),
+			Buckets: []cloud.Bucket{},
 		}
 		if buckets, ok := allBuckets[account]; ok {
 			userMailData.Buckets = filter.Buckets(buckets, bucketFilter, whitelistFilter, untaggedFilter)

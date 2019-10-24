@@ -91,12 +91,14 @@ func MarkForCleanup(mngr cloud.ResourceManager, thresholds map[string]int, dryRu
 
 		// General case
 		for _, res := range filter.Instances(res.Instances, instanceFilter, untaggedFilter) {
-			resourcesToTag.Instances = append(resourcesToTag.Instances, res)
-			tagListGeneral = append(tagListGeneral, res)
-			alreadySelectedInstances[res.ID()] = true
-			days := time.Now().Sub(res.CreationTime()).Hours() / 24.0
-			costPerDay := billing.ResourceCostPerDay(res)
-			totalCost += days * costPerDay
+			if _, found := alreadySelectedInstances[res.ID()]; !found {
+				resourcesToTag.Instances = append(resourcesToTag.Instances, res)
+				tagListGeneral = append(tagListGeneral, res)
+				alreadySelectedInstances[res.ID()] = true
+				days := time.Now().Sub(res.CreationTime()).Hours() / 24.0
+				costPerDay := billing.ResourceCostPerDay(res)
+				totalCost += days * costPerDay
+			}
 		}
 
 		// VOLUMES
