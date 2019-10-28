@@ -266,6 +266,7 @@ func (c *Client) UntaggedResourcesReview(mngr cloud.ResourceManager, accountUser
 	for account, resources := range allCompute {
 		log.Printf("Performing untagged resources review in %s", account)
 		untaggedFilter := filter.New()
+		untaggedFilter.AddGeneralRule(filter.Negate(filter.HasTag("cloudsweeper-delete-at")))
 		if len(tags) == 0 {
 			untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
 		} else {
