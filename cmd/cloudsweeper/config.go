@@ -4,10 +4,15 @@
 package main
 
 import (
+	"bufio"
 	"flag"
+	"fmt"
 	"log"
+	"os"
 	"strconv"
+	"strings"
 
+	"github.com/agaridata/cloudsweeper/cloud"
 	"github.com/joho/godotenv"
 )
 
@@ -70,11 +75,29 @@ var configMapping = map[string]lookup{
 	"required-tags": lookup{"REQUIRED_TAGS", optionalDefault},
 }
 
-func loadConfig() {
+func loadFile(fileName string) {
 	var err error
-	config, err = godotenv.Read(configFileName)
+	config, err = godotenv.Read(fileName)
 	if err != nil {
-		log.Fatalf("Could not load config file '%s': %s", configFileName, err)
+		log.Fatalf("Could not load config file '%s': %s", fileName, err)
+	}
+}
+
+func loadDoNotDelete() {
+	if doNotDelete == nil {
+		doNotDelete = make(map[string]bool)
+	}
+	dndFile, err := os.Open(doNotDeleteFileName)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer dndFile.Close()
+	scanner := bufio.NewScanner(dndFile)
+	for scanner.Scan() {
+		doNotDelete[strings.Trim(scanner.Text(), " ")] = true
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
 	}
 }
 
@@ -117,4 +140,29 @@ func findConfigInt(name string) int {
 		log.Fatalf("Value specified for %s is not an integer", name)
 	}
 	return i
+}
+
+func cspFromConfig(rawFlag string) cloud.CSP {
+	flagVal := strings.ToLower(rawFlag)
+	switch flagVal {
+	case cspFlagAWS:
+		return cloud.AWS
+	case cspFlagGCP:
+		return cloud.GCP
+	default:
+		fmt.Fprintf(os.Stderr, "Invalid CSP flag \"%s\" specified\n", rawFlag)
+		os.Exit(1)
+		return cloud.AWS
+	}
+}
+
+func tagsFromConfig(rawFlag string) []string {
+	tags := strings.Split(rawFlag, ",")
+	for _, tag := range tags {
+		if len(tag) == 0 {
+			log.Println("Empty tag detected from config")
+			return []string{}
+		}
+	}
+	return tags
 }

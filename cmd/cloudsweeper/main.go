@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/agaridata/cloudsweeper/cloud"
 	"github.com/agaridata/cloudsweeper/cloud/billing"
@@ -21,13 +20,15 @@ import (
 )
 
 const (
-	configFileName = "config.conf"
-	cspFlagAWS     = "aws"
-	cspFlagGCP     = "gcp"
+	configFileName      = "config.conf"
+	doNotDeleteFileName = "do-not-delete.conf"
+	cspFlagAWS          = "aws"
+	cspFlagGCP          = "gcp"
 )
 
 var (
-	config map[string]string
+	config      map[string]string
+	doNotDelete map[string]bool
 
 	cspToUse = flag.String("csp", "", "Which CSP to run against")
 	orgFile  = flag.String("org-file", "", "Specify where to find the JSON with organization information")
@@ -110,7 +111,7 @@ const banner = `
 
 func main() {
 	fmt.Println(banner)
-	loadConfig()
+	loadFile(configFileName)
 	flag.Parse()
 	loadThresholds()
 	csp := cspFromConfig(findConfig("csp"))
@@ -138,11 +139,12 @@ func main() {
 			log.Println("Not sending marking report since this was not a dry run")
 		}
 	case "review":
-		log.Println("Entering 'review' mode")
+		log.Println("Entering 'review' mode"
+		loadDoNotDelete()
 		org := parseOrganization(findConfig("org-file"))
 		mngr := initManager(csp, org)
 		client := initNotifyClient()
-		client.OldResourceReview(mngr, org, csp, thresholds)
+		client.OldResourceReview(mngr, org, csp, thresholds, doNotDelete)
 	case "warn":
 		log.Println("Entering 'warn' mode")
 		org := parseOrganization(findConfig("org-file"))
@@ -248,29 +250,4 @@ func getPositionalCmd() string {
 		return ""
 	}
 	return os.Args[n-1]
-}
-
-func cspFromConfig(rawFlag string) cloud.CSP {
-	flagVal := strings.ToLower(rawFlag)
-	switch flagVal {
-	case cspFlagAWS:
-		return cloud.AWS
-	case cspFlagGCP:
-		return cloud.GCP
-	default:
-		fmt.Fprintf(os.Stderr, "Invalid CSP flag \"%s\" specified\n", rawFlag)
-		os.Exit(1)
-		return cloud.AWS
-	}
-}
-
-func tagsFromConfig(rawFlag string) []string {
-	tags := strings.Split(rawFlag, ",")
-	for _, tag := range tags {
-		if len(tag) == 0 {
-			log.Println("Empty tag detected from config")
-			return []string{}
-		}
-	}
-	return tags
 }
