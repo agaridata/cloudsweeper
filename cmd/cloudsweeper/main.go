@@ -139,7 +139,7 @@ func main() {
 			log.Println("Not sending marking report since this was not a dry run")
 		}
 	case "review":
-		log.Println("Entering 'review' mode"
+		log.Println("Entering 'review' mode")
 		loadDoNotDelete()
 		org := parseOrganization(findConfig("org-file"))
 		mngr := initManager(csp, org)
