@@ -146,7 +146,7 @@ func initManagerToMailDataMapping(managers cs.Employees) map[string]*resourceMai
 //		- Resource is older than 30 days
 //		- A whitelisted resource is older than 6 months
 //		- An instance marked with do-not-delete is older than a week
-func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organization, csp cloud.CSP, thresholds map[string]int) {
+func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organization, csp cloud.CSP, thresholds map[string]int, dndList map[string]bool) {
 	allCompute := mngr.AllResourcesPerAccount()
 	allBuckets := mngr.BucketsPerAccount()
 	accountUserMapping := org.AccountToUserMapping(csp)
@@ -168,10 +168,11 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 	// Create filters
 	instanceFilter := filter.New()
 	instanceFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-instances-older-than-days", thresholds)))
-	instanceFilter.AddGeneralRule(filter.Negate(filter.HasTag("cloudsweeper-do-not-delete")))
+	instanceFilter.AddGeneralRule(filter.Negate(filter.DoNotDelete(dndList)))
 
 	imageFilter := filter.New()
 	imageFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-images-older-than-days", thresholds)))
+	imageFilter.AddGeneralRule(filter.Negate(filter.DoNotDelete(dndList)))
 
 	volumeFilter := filter.New()
 	volumeFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-unattached-older-than-days", thresholds)))
@@ -183,22 +184,23 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 
 	bucketFilter := filter.New()
 	bucketFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-buckets-older-than-days", thresholds)))
+	bucketFilter.AddGeneralRule(filter.Negate(filter.DoNotDelete(dndList)))
 
 	whitelistFilter := filter.New()
 	whitelistFilter.OverrideWhitelist = true
 	whitelistFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-whitelist-older-than-days", thresholds)))
-	whitelistFilter.AddGeneralRule(filter.Negate(filter.HasTag("cloudsweeper-do-not-delete")))
+	whitelistFilter.AddGeneralRule(filter.Negate(filter.DoNotDelete(dndList)))
 
 	untaggedFilter := filter.New()
 	untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
 	untaggedFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-untagged-older-than-days", thresholds)))
 	untaggedFilter.AddSnapshotRule(filter.IsNotInUse())
 	untaggedFilter.AddVolumeRule(filter.IsUnattached())
-	untaggedFilter.AddGeneralRule(filter.Negate(filter.HasTag("cloudsweeper-do-not-delete")))
+	untaggedFilter.AddGeneralRule(filter.Negate(filter.DoNotDelete(dndList)))
 
 	// This only applies to instances
 	dndFilter := filter.New()
-	dndFilter.AddGeneralRule(filter.Negate(filter.HasTag("cloudsweeper-do-not-delete")))
+	dndFilter.AddGeneralRule(filter.Negate(filter.DoNotDelete(dndList)))
 	dndFilter.AddGeneralRule(filter.OlderThanXDays(getThreshold("notify-dnd-older-than-days", thresholds)))
 
 	for account, resources := range allCompute {

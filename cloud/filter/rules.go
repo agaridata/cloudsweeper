@@ -280,3 +280,12 @@ func NotModifiedInXDays(days int) func(cloud.Bucket) bool {
 		return time.Now().After(b.LastModified().AddDate(0, 0, days))
 	}
 }
+
+func DoNotDelete(dndList map[string]bool) func(cloud.Resource) bool {
+	return func(res cloud.Resource) bool {
+		if _, ok := dndList[res.ID()]; ok {
+			return true
+		}
+		return false
+	}
+}
