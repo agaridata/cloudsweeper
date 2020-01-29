@@ -208,19 +208,31 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 		username := accountUserMapping[account]
 		employee := userEmployeeMapping[username]
 
-		// Apply filters
+		// Apply filters (EXCLUDE WHITELISTED)
 		userMailData := resourceMailData{
 			Owner:     username,
-			Instances: filter.Instances(resources.Instances, instanceFilter, whitelistFilter, dndFilter, untaggedFilter),
-			Images:    filter.Images(resources.Images, imageFilter, whitelistFilter, untaggedFilter),
-			//Volumes:   filter.Volumes(resources.Volumes, volumeFilter, whitelistFilter, untaggedFilter),
-			//Snapshots: filter.Snapshots(resources.Snapshots, snapshotFilter, whitelistFilter, untaggedFilter),
+			Instances: filter.Instances(resources.Instances, instanceFilter, dndFilter, untaggedFilter),
+			Images:    filter.Images(resources.Images, imageFilter, untaggedFilter),
+			//Volumes:   filter.Volumes(resources.Volumes, volumeFilter, untaggedFilter),
+			//Snapshots: filter.Snapshots(resources.Snapshots, snapshotFilter, untaggedFilter),
 			Buckets: []cloud.Bucket{},
 		}
 		if buckets, ok := allBuckets[account]; ok {
-			userMailData.Buckets = filter.Buckets(buckets, bucketFilter, whitelistFilter, untaggedFilter)
+			userMailData.Buckets = filter.Buckets(buckets, bucketFilter, untaggedFilter)
 		}
 
+		// Apply filters (INCLUDE WHITELISTED)
+		userMailDataWhitelisted := resourceMailData{
+			Owner:     username,
+			Instances: filter.Instances(resources.Instances, instanceFilter, whitelistFilter, dndFilter, untaggedFilter),
+			Images:    filter.Images(resources.Images, imageFilter, whitelistFilter, untaggedFilter),
+			//Volumes:   filter.Volumes(resources.Volumes, volumeFilter, untaggedFilter),
+			//Snapshots: filter.Snapshots(resources.Snapshots, snapshotFilter, untaggedFilter),
+			Buckets: []cloud.Bucket{},
+		}
+		if buckets, ok := allBuckets[account]; ok {
+			userMailDataWhitelisted.Buckets = filter.Buckets(buckets, bucketFilter, whitelistFilter, untaggedFilter)
+		}
 		// Add to the manager summary
 		if managerSummaryMailData, ok := managerToMailDataMapping[employee.Manager.Username]; ok { // safe or org _should_ have thrown an error
 			managerSummaryMailData.Instances = append(managerSummaryMailData.Instances, userMailData.Instances...)
@@ -233,11 +245,11 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 		}
 
 		// Add to the total summary
-		totalSummaryMailData.Instances = append(totalSummaryMailData.Instances, userMailData.Instances...)
-		totalSummaryMailData.Images = append(totalSummaryMailData.Images, userMailData.Images...)
-		totalSummaryMailData.Snapshots = append(totalSummaryMailData.Snapshots, userMailData.Snapshots...)
-		totalSummaryMailData.Volumes = append(totalSummaryMailData.Volumes, userMailData.Volumes...)
-		totalSummaryMailData.Buckets = append(totalSummaryMailData.Buckets, userMailData.Buckets...)
+		totalSummaryMailData.Instances = append(totalSummaryMailData.Instances, userMailDataWhitelisted.Instances...)
+		totalSummaryMailData.Images = append(totalSummaryMailData.Images, userMailDataWhitelisted.Images...)
+		totalSummaryMailData.Snapshots = append(totalSummaryMailData.Snapshots, userMailDataWhitelisted.Snapshots...)
+		totalSummaryMailData.Volumes = append(totalSummaryMailData.Volumes, userMailDataWhitelisted.Volumes...)
+		totalSummaryMailData.Buckets = append(totalSummaryMailData.Buckets, userMailDataWhitelisted.Buckets...)
 
 		if userMailData.ResourceCount() > 0 {
 			title := fmt.Sprintf("Review Notification (%d resources) (%s)", userMailData.ResourceCount(), time.Now().Format("2006-01-02"))
@@ -269,6 +281,7 @@ func (c *Client) UntaggedResourcesReview(mngr cloud.ResourceManager, accountUser
 		log.Printf("Performing untagged resources review in %s", account)
 		untaggedFilter := filter.New()
 		untaggedFilter.AddGeneralRule(filter.Negate(filter.HasTag("cloudsweeper-delete-at")))
+		untaggedFilter.AddGeneralRule(filter.Negate(filter.TaggedForCleanup()))
 		if len(tags) == 0 {
 			untaggedFilter.AddGeneralRule(filter.IsUntaggedWithException("Name"))
 		} else {
