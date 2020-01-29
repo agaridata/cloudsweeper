@@ -235,11 +235,11 @@ func (c *Client) OldResourceReview(mngr cloud.ResourceManager, org *cs.Organizat
 		}
 		// Add to the manager summary
 		if managerSummaryMailData, ok := managerToMailDataMapping[employee.Manager.Username]; ok { // safe or org _should_ have thrown an error
-			managerSummaryMailData.Instances = append(managerSummaryMailData.Instances, userMailDataWhitelisted.Instances...)
-			managerSummaryMailData.Images = append(managerSummaryMailData.Images, userMailDataWhitelisted.Images...)
-			managerSummaryMailData.Snapshots = append(managerSummaryMailData.Snapshots, userMailDataWhitelisted.Snapshots...)
-			managerSummaryMailData.Volumes = append(managerSummaryMailData.Volumes, userMailDataWhitelisted.Volumes...)
-			managerSummaryMailData.Buckets = append(managerSummaryMailData.Buckets, userMailDataWhitelisted.Buckets...)
+			managerSummaryMailData.Instances = append(managerSummaryMailData.Instances, userMailData.Instances...)
+			managerSummaryMailData.Images = append(managerSummaryMailData.Images, userMailData.Images...)
+			managerSummaryMailData.Snapshots = append(managerSummaryMailData.Snapshots, userMailData.Snapshots...)
+			managerSummaryMailData.Volumes = append(managerSummaryMailData.Volumes, userMailData.Volumes...)
+			managerSummaryMailData.Buckets = append(managerSummaryMailData.Buckets, userMailData.Buckets...)
 		} else {
 			log.Fatalf("%s is not a manager??? Verify `organization.go` and the org repo itself for issues", employee.Manager.Username)
 		}
