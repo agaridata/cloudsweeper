@@ -415,7 +415,7 @@ func (m *awsResourceManager) CleanupBuckets(buckets []Bucket) error {
 func getAWSInstances(account string, client *ec2.EC2) ([]Instance, error) {
 	// We're only interested in running instances
 	input := &ec2.DescribeInstancesInput{
-		Filters: []*ec2.Filter{&ec2.Filter{
+		Filters: []*ec2.Filter{{
 			Name:   aws.String(instanceStateFilterName),
 			Values: aws.StringSlice([]string{instanceStateRunning})}},
 	}
@@ -584,9 +584,9 @@ func getAllEC2Resources(accounts []string, funcToRun func(client *ec2.EC2, accou
 				if err == nil {
 					log.Printf("Region %s is disabled, skipping it!", region)
 					return
-				} else {
-					log.Fatalf("Unknown AWS error %s", err)
 				}
+				log.Fatalf("Unknown AWS error %s", err)
+
 			}
 			client := ec2.New(sess, &aws.Config{
 				Credentials: cred,
@@ -683,7 +683,7 @@ func addAWSTag(r Resource, key, value string, overwrite bool) error {
 	client := clientForAWSResource(r)
 	input := &ec2.CreateTagsInput{
 		Resources: aws.StringSlice([]string{r.ID()}),
-		Tags: []*ec2.Tag{&ec2.Tag{
+		Tags: []*ec2.Tag{{
 			Key:   aws.String(key),
 			Value: aws.String(value),
 		}},
@@ -700,7 +700,7 @@ func removeAWSTag(r Resource, key string) error {
 	client := clientForAWSResource(r)
 	input := &ec2.DeleteTagsInput{
 		Resources: aws.StringSlice([]string{r.ID()}),
-		Tags: []*ec2.Tag{&ec2.Tag{
+		Tags: []*ec2.Tag{{
 			Key:   aws.String(key),
 			Value: aws.String(val),
 		}},

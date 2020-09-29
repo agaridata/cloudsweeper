@@ -84,7 +84,7 @@ func (i *awsImage) MakePrivate() error {
 	input := &ec2.ModifyImageAttributeInput{
 		ImageId: aws.String(i.ID()),
 		LaunchPermission: &ec2.LaunchPermissionModifications{
-			Remove: []*ec2.LaunchPermission{&ec2.LaunchPermission{
+			Remove: []*ec2.LaunchPermission{{
 				Group: aws.String("all"),
 			}},
 		},
