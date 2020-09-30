@@ -25,54 +25,54 @@ type lookup struct {
 
 var configMapping = map[string]lookup{
 	// General variables
-	"csp":      lookup{"CS_CSP", "aws"},
-	"org-file": lookup{"CS_ORG_FILE", "organization.json"},
+	"csp":      {"CS_CSP", "aws"},
+	"org-file": {"CS_ORG_FILE", "organization.json"},
 
 	// Billing related
-	"billing-account":       lookup{"CS_BILLING_ACCOUNT", ""},
-	"billing-bucket-region": lookup{"CS_BILLING_BUCKET_REGION", ""},
-	"billing-csv-prefix":    lookup{"CS_BILLING_CSV_PREFIX", ""},
-	"billing-bucket":        lookup{"CS_BILLING_BUCKET_NAME", ""},
-	"billing-sort-tag":      lookup{"CS_BILLING_SORT_TAG", optionalDefault},
+	"billing-account":       {"CS_BILLING_ACCOUNT", ""},
+	"billing-bucket-region": {"CS_BILLING_BUCKET_REGION", ""},
+	"billing-csv-prefix":    {"CS_BILLING_CSV_PREFIX", ""},
+	"billing-bucket":        {"CS_BILLING_BUCKET_NAME", ""},
+	"billing-sort-tag":      {"CS_BILLING_SORT_TAG", optionalDefault},
 
 	// Email variables
-	"smtp-username": lookup{"CS_SMTP_USER", ""},
-	"smtp-password": lookup{"CS_SMTP_PASSWORD", ""},
-	"smtp-server":   lookup{"CS_SMTP_SERVER", ""},
-	"smtp-port":     lookup{"CS_SMTP_PORT", "587"},
+	"smtp-username": {"CS_SMTP_USER", ""},
+	"smtp-password": {"CS_SMTP_PASSWORD", ""},
+	"smtp-server":   {"CS_SMTP_SERVER", ""},
+	"smtp-port":     {"CS_SMTP_PORT", "587"},
 
 	// Notifying specific variables
-	"warning-hours":            lookup{"CS_WARNING_HOURS", "48"},
-	"display-name":             lookup{"CS_DISPLAY_NAME", "Cloudsweeper"},
-	"mail-from":                lookup{"CS_MAIL_FROM", ""},
-	"billing-report-addressee": lookup{"CS_BILLING_REPORT_ADDRESSEE", ""},
-	"total-sum-addressee":      lookup{"CS_TOTAL_SUM_ADDRESSEE", ""},
-	"mail-domain":              lookup{"CS_EMAIL_DOMAIN", ""},
+	"warning-hours":            {"CS_WARNING_HOURS", "48"},
+	"display-name":             {"CS_DISPLAY_NAME", "Cloudsweeper"},
+	"mail-from":                {"CS_MAIL_FROM", ""},
+	"billing-report-addressee": {"CS_BILLING_REPORT_ADDRESSEE", ""},
+	"total-sum-addressee":      {"CS_TOTAL_SUM_ADDRESSEE", ""},
+	"mail-domain":              {"CS_EMAIL_DOMAIN", ""},
 
 	// Setup variables
-	"aws-master-arn": lookup{"CS_MASTER_ARN", ""},
+	"aws-master-arn": {"CS_MASTER_ARN", ""},
 
 	// Clean thresholds
-	"clean-untagged-older-than-days":   lookup{"CLEAN_UNTAGGED_OLDER_THAN_DAYS", "30"},
-	"clean-instances-older-than-days":  lookup{"CLEAN_INSTANCES_OLDER_THAN_DAYS", "182"},
-	"clean-images-older-than-days":     lookup{"CLEAN_IMAGES_OLDER_THAN_DAYS", "182"},
-	"clean-snapshots-older-than-days":  lookup{"CLEAN_SNAPSHOTS_OLDER_THAN_DAYS", "182"},
-	"clean-unattached-older-than-days": lookup{"CLEAN_UNATTACHED_OLDER_THAN_DAYS", "30"},
-	"clean-bucket-not-modified-days":   lookup{"CLEAN_BUCKET_NOT_MODIFIED_DAYS", "182"},
-	"clean-bucket-older-than-days":     lookup{"CLEAN_BUCKET_OLDER_THAN_DAYS", "7"},
-	"clean-keep-n-component-images":    lookup{"CLEAN_KEEP_N_COMPONENT_IMAGES", "2"},
+	"clean-untagged-older-than-days":   {"CLEAN_UNTAGGED_OLDER_THAN_DAYS", "30"},
+	"clean-instances-older-than-days":  {"CLEAN_INSTANCES_OLDER_THAN_DAYS", "182"},
+	"clean-images-older-than-days":     {"CLEAN_IMAGES_OLDER_THAN_DAYS", "182"},
+	"clean-snapshots-older-than-days":  {"CLEAN_SNAPSHOTS_OLDER_THAN_DAYS", "182"},
+	"clean-unattached-older-than-days": {"CLEAN_UNATTACHED_OLDER_THAN_DAYS", "30"},
+	"clean-bucket-not-modified-days":   {"CLEAN_BUCKET_NOT_MODIFIED_DAYS", "182"},
+	"clean-bucket-older-than-days":     {"CLEAN_BUCKET_OLDER_THAN_DAYS", "7"},
+	"clean-keep-n-component-images":    {"CLEAN_KEEP_N_COMPONENT_IMAGES", "2"},
 
 	//  Notify thresholds
-	"notify-untagged-older-than-days":   lookup{"NOTIFY_UNTAGGED_OLDER_THAN_DAYS", "14"},
-	"notify-instances-older-than-days":  lookup{"NOTIFY_INSTANCES_OLDER_THAN_DAYS", "30"},
-	"notify-images-older-than-days":     lookup{"NOTIFY_IMAGES_OLDER_THAN_DAYS", "30"},
-	"notify-unattached-older-than-days": lookup{"NOTIFY_UNATTACHED_OLDER_THAN_DAYS", "30"},
-	"notify-snapshots-older-than-days":  lookup{"NOTIFY_SNAPSHOTS_OLDER_THAN_DAYS", "30"},
-	"notify-buckets-older-than-days":    lookup{"NOTIFY_BUCKETS_OLDER_THAN_DAYS", "30"},
-	"notify-whitelist-older-than-days":  lookup{"NOTIFY_WHITELIST_OLDER_THAN_DAYS", "182"},
-	"notify-dnd-older-than-days":        lookup{"NOTIFY_DND_OLDER_THAN_DAYS", "7"},
+	"notify-untagged-older-than-days":   {"NOTIFY_UNTAGGED_OLDER_THAN_DAYS", "14"},
+	"notify-instances-older-than-days":  {"NOTIFY_INSTANCES_OLDER_THAN_DAYS", "30"},
+	"notify-images-older-than-days":     {"NOTIFY_IMAGES_OLDER_THAN_DAYS", "30"},
+	"notify-unattached-older-than-days": {"NOTIFY_UNATTACHED_OLDER_THAN_DAYS", "30"},
+	"notify-snapshots-older-than-days":  {"NOTIFY_SNAPSHOTS_OLDER_THAN_DAYS", "30"},
+	"notify-buckets-older-than-days":    {"NOTIFY_BUCKETS_OLDER_THAN_DAYS", "30"},
+	"notify-whitelist-older-than-days":  {"NOTIFY_WHITELIST_OLDER_THAN_DAYS", "182"},
+	"notify-dnd-older-than-days":        {"NOTIFY_DND_OLDER_THAN_DAYS", "7"},
 
-	"required-tags": lookup{"REQUIRED_TAGS", optionalDefault},
+	"required-tags": {"REQUIRED_TAGS", optionalDefault},
 }
 
 func loadFile(fileName string) {

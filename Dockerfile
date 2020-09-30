@@ -1,12 +1,11 @@
 # STEP 1 build executable binary
-FROM golang:1.10-alpine3.7 as builder
+FROM golang:1.15-alpine as builder
 
-ADD . $GOPATH/src/github.com/agaridata/cloudsweeper
-WORKDIR $GOPATH/src/github.com/agaridata/cloudsweeper
+ADD . /cloudsweeper
+WORKDIR /cloudsweeper
 
 RUN apk -U upgrade && \
-    apk add --no-cache -U git && \
-    apk add --no-cache -U ca-certificates && \
+    apk add --no-cache -U git ca-certificates gcc musl-dev && \
     update-ca-certificates && \
     go get ./... && \
     go test -cover ./... && \

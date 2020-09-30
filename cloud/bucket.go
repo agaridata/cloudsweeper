@@ -124,11 +124,18 @@ func (b *awsBucket) SetTag(key, value string, overwrite bool) error {
 		Credentials: creds,
 		Region:      aws.String(b.Location()),
 	})
+	
 	tagging := &s3.Tagging{
-		TagSet: []*s3.Tag{&s3.Tag{
+		TagSet: []*s3.Tag{{
 			Key:   aws.String(key),
 			Value: aws.String(value),
 		}},
+	}
+	for key, value := range b.Tags() {
+		tagging.TagSet = append(tagging.TagSet, &s3.Tag{
+			Key: aws.String(key),
+			Value: aws.String(value),
+		})
 	}
 	input := &s3.PutBucketTaggingInput{
 		Bucket:  aws.String(b.ID()),

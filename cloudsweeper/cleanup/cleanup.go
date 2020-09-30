@@ -140,6 +140,7 @@ func MarkForCleanup(mngr cloud.ResourceManager, thresholds map[string]int, dryRu
 				resourcesToTag.Buckets = append(resourcesToTag.Buckets, res)
 				tagListGeneral = append(tagListGeneral, res)
 				totalCost += billing.BucketPricePerMonth(res)
+				log.Printf("Want to mark bucket %s with Tags %v and lastModified %s", res.ID(), res.Tags(), res.LastModified().String())
 			}
 		}
 
