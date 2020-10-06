@@ -235,10 +235,25 @@ func (m *awsResourceManager) BucketsPerAccount() map[string][]Bucket {
 					buTags, err := bucketClient.GetBucketTagging(&s3.GetBucketTaggingInput{
 						Bucket: bu.Name,
 					})
-					tags := make(map[string]string)
-					if err == nil {
-						tags = convertAWSS3Tags(buTags.TagSet)
+					// check for errors from tag call
+					if err != nil {
+						// if the error is an AWS type, handle based on type, otherwise panic as unknown type
+						if awsErr, ok := err.(awserr.Error); ok {
+							switch awsErr.Code() {
+							// S3 returns an error for "no tags found", log and continue
+							case "NoSuchTagSet":
+								log.Printf("No Tags for Bucket %s", *bu.Name)
+							// Any other AWS Error should cause a panic
+							default:
+								panic(fmt.Sprintf("AWS Error getting tags %+v", awsErr))
+							}
+						} else {
+							// Error isn't from AWS
+							panic(fmt.Sprintf("Unknown Error getting tags %+v", err))
+						}
 					}
+
+					tags := convertAWSS3Tags(buTags.TagSet)
 
 					cw := cloudwatch.New(sess, &aws.Config{
 						Credentials: cred,
